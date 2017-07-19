@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="small_padding">16dp</dimen>
-    <dimen name="tiny_padding">4dp</dimen>
+    <dimen name="list_small_padding">16dp</dimen>
+    <dimen name="list_big_padding">16dp</dimen>
+    <dimen name="list_tiny_padding">4dp</dimen>
 </resources>
