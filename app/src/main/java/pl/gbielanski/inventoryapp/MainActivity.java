@@ -15,5 +15,8 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView rcInventoryList = (RecyclerView)findViewById(R.id.rc_inventory_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         rcInventoryList.setLayoutManager(layoutManager);
+        InventoryAdapter mAdapter = new InventoryAdapter(this);
+        rcInventoryList.setAdapter(mAdapter);
+
     }
 }
