@@ -2,6 +2,7 @@ package pl.gbielanski.inventoryapp;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -11,7 +12,11 @@ class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.InventoryHo
 
     @Override
     public InventoryHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return null;
+        Context context = parent.getContext();
+        int inventoryItemResourceId = R.layout.inventory_list_item;
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View view = inflater.inflate(inventoryItemResourceId, parent, false);
+        return new InventoryHolder(view);
     }
 
     @Override
