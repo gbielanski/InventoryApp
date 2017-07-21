@@ -22,7 +22,7 @@ public class InventoryItemContract {
 
         public final static String _ID = BaseColumns._ID;
         public final static String COLUMN_ITEM_NAME = "name";
-        public final static String COLUMN_ITEM_COUNT = "count";
+        public final static String COLUMN_ITEM_QUANTITY = "quantity";
         public final static String COLUMN_ITEM_PRICE = "price";
         public final static String COLUMN_ITEM_PICTURE = "picture";
     }

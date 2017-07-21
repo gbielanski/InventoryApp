@@ -13,7 +13,7 @@ import android.util.Log;
 
 import pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry;
 
-import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry.COLUMN_ITEM_COUNT;
+import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry.COLUMN_ITEM_QUANTITY;
 import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry.COLUMN_ITEM_NAME;
 import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry.COLUMN_ITEM_PRICE;
 import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry.TABLE_NAME;
@@ -91,7 +91,7 @@ public class InventoryProvider extends ContentProvider {
             throw new IllegalArgumentException("Item requires a name");
         }
 
-        Integer count = contentValues.getAsInteger(COLUMN_ITEM_COUNT);
+        Integer count = contentValues.getAsInteger(COLUMN_ITEM_QUANTITY);
         if (count != null && count < 0) {
             throw new IllegalArgumentException("Item requires valid count");
         }

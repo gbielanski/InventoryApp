@@ -9,7 +9,7 @@ import pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry;
 public class InventoryDBHelper extends SQLiteOpenHelper
 {
     private static final String DATABASE_NAME = "inventory.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     public InventoryDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -20,7 +20,7 @@ public class InventoryDBHelper extends SQLiteOpenHelper
         String SQL_CREATE_ITEMS_TABLE =  "CREATE TABLE " + InventoryItemEntry.TABLE_NAME + " ("
                 + InventoryItemEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + InventoryItemEntry.COLUMN_ITEM_NAME + " TEXT NOT NULL, "
-                + InventoryItemEntry.COLUMN_ITEM_COUNT + " INTEGER NOT NULL DEFAULT 0, "
+                + InventoryItemEntry.COLUMN_ITEM_QUANTITY + " INTEGER NOT NULL DEFAULT 0, "
                 + InventoryItemEntry.COLUMN_ITEM_PRICE + " INTEGER NOT NULL DEFAULT 0, "
                 + InventoryItemEntry.COLUMN_ITEM_PICTURE + " TEXT);";
 

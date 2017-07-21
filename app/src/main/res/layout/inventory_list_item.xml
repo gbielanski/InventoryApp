@@ -3,65 +3,81 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginLeft="@dimen/list_small_padding"
-        android:src="@drawable/ic_remove_circle_outline_black_48px" />
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/list_tiny_padding"
+    android:paddingTop="@dimen/list_tiny_padding">
 
     <LinearLayout
-        android:layout_marginLeft="@dimen/list_big_padding"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:orientation="vertical"
-        android:paddingEnd="@dimen/list_small_padding"
-        android:paddingRight="@dimen/list_small_padding">
+        android:orientation="horizontal">
 
-        <TextView
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-            android:textStyle="bold"
-            tools:text="Name" />
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/list_small_padding"
+            android:src="@drawable/ic_remove_circle_outline_black_48px" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/list_big_padding"
+            android:layout_marginLeft="@dimen/list_big_padding"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/list_tiny_padding"
+            android:paddingEnd="@dimen/list_small_padding"
+            android:paddingRight="@dimen/list_small_padding">
 
             <TextView
+                android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/quantity_label" />
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:textStyle="bold"
+                tools:text="Name" />
 
-            <TextView
-                android:id="@+id/quantity"
-                android:layout_width="72dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/list_small_padding"
-                android:layout_marginStart="@dimen/list_small_padding"
-                android:gravity="end"
-                tools:text="100 000" />
+                android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/list_small_padding"
-                android:layout_marginStart="@dimen/list_small_padding"
-                android:text="@string/price_label" />
-            <TextView
-                android:id="@+id/price"
-                android:layout_width="72dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/list_small_padding"
-                android:layout_marginStart="@dimen/list_small_padding"
-                android:gravity="end"
-                tools:text="100 PLN" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/quantity_label" />
+
+                <TextView
+                    android:id="@+id/quantity"
+                    android:layout_width="72dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/list_small_padding"
+                    android:layout_marginStart="@dimen/list_small_padding"
+                    android:gravity="end"
+                    tools:text="100 000" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/list_small_padding"
+                    android:layout_marginStart="@dimen/list_small_padding"
+                    android:text="@string/price_label" />
+
+                <TextView
+                    android:id="@+id/price"
+                    android:layout_width="72dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/list_small_padding"
+                    android:layout_marginStart="@dimen/list_small_padding"
+                    android:gravity="end"
+                    tools:text="100 PLN" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray" />
 </LinearLayout>
