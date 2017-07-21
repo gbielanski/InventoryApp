@@ -3,6 +3,7 @@ package pl.gbielanski.inventoryapp;
 import android.app.LoaderManager;
 import android.content.ContentValues;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
@@ -100,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void inventoryItemOnClick(int position) {
-        Toast.makeText(this, "Show Item details", Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(this, DetailActivity.class);
+        startActivity(intent);
     }
 }
