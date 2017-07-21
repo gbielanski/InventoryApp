@@ -2,6 +2,7 @@ package pl.gbielanski.inventoryapp.data;
 
 import android.net.Uri;
 import android.provider.BaseColumns;
+import android.text.TextUtils;
 
 public class InventoryItemContract {
     private InventoryItemContract(){
@@ -25,5 +26,9 @@ public class InventoryItemContract {
         public final static String COLUMN_ITEM_QUANTITY = "quantity";
         public final static String COLUMN_ITEM_PRICE = "price";
         public final static String COLUMN_ITEM_PICTURE = "picture";
+
+        public static Uri getContentUriForId(int id){
+            return Uri.withAppendedPath(CONTENT_URI, String.valueOf(id));
+        }
     }
 }

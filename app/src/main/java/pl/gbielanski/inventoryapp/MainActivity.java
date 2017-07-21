@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
 import pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry;
 
@@ -18,7 +20,8 @@ import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryIte
 import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry.COLUMN_ITEM_NAME;
 import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry.COLUMN_ITEM_PRICE;
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>,
+        InventoryAdapter.OnButtonSalesListener, InventoryAdapter.OnInventoryItemListener {
     public static final String LOG_TAG = MainActivity.class.getSimpleName();
     public static final int LOADER_ID = 1234;
     private InventoryAdapter mAdapter;
@@ -31,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         RecyclerView rcInventoryList = (RecyclerView)findViewById(R.id.rc_inventory_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         rcInventoryList.setLayoutManager(layoutManager);
-        mAdapter = new InventoryAdapter(this);
+        mAdapter = new InventoryAdapter(this, this, this);
         rcInventoryList.setAdapter(mAdapter);
         insertDummyData();
         getLoaderManager().initLoader(LOADER_ID, null, this);
@@ -76,5 +79,27 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
+    }
+
+    @Override
+    public void salesButtonOnClick(int position) {
+        Cursor cursor = mAdapter.getData();
+        cursor.moveToPosition(position);
+        Integer quantity = cursor.getInt(cursor.getColumnIndex(COLUMN_ITEM_QUANTITY));
+        if(quantity == 0)
+            Toast.makeText(this, "Item cannot be sold, quantity is zero", Toast.LENGTH_LONG).show();
+        else{
+            quantity--;
+            ContentValues cv = new ContentValues();
+            cv.put(COLUMN_ITEM_QUANTITY, quantity);
+            int id = cursor.getInt(cursor.getColumnIndex(InventoryItemEntry._ID));
+            Uri uri = InventoryItemEntry.getContentUriForId(id);
+            getContentResolver().update(uri, cv, null, null);
+        }
+    }
+
+    @Override
+    public void inventoryItemOnClick(int position) {
+        Toast.makeText(this, "Show Item details", Toast.LENGTH_LONG).show();
     }
 }

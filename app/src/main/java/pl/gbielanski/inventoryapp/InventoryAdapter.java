@@ -6,6 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry.COLUMN_ITEM_QUANTITY;
@@ -14,11 +16,29 @@ import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryIte
 
 class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.InventoryHolder>{
     private Cursor mCursor;
-    public InventoryAdapter(Context context) {
+    private OnButtonSalesListener mSalesButtonListener;
+    private OnInventoryItemListener mInventoryItemListener;
+
+    public InventoryAdapter(Context context, OnButtonSalesListener salesListener, OnInventoryItemListener itemListener) {
+        mSalesButtonListener = salesListener;
+        mInventoryItemListener = itemListener;
+
+    }
+
+    public interface OnButtonSalesListener{
+        void salesButtonOnClick(int position);
+    }
+
+    public interface OnInventoryItemListener{
+        void inventoryItemOnClick(int position);
     }
 
     public void setData(Cursor c){
         mCursor = c;
+    }
+
+    public Cursor getData(){
+        return mCursor;
     }
 
     @Override
@@ -51,17 +71,29 @@ class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.InventoryHo
         return mCursor.getCount();
     }
 
-    public class InventoryHolder extends RecyclerView.ViewHolder {
+    public class InventoryHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView tvItemName;
         TextView tvItemQuantity;
         TextView tvItemPrice;
+        ImageView buttonSale;
 
         public InventoryHolder(View itemView) {
             super(itemView);
             tvItemName = (TextView)itemView.findViewById(R.id.name);
             tvItemQuantity = (TextView)itemView.findViewById(R.id.quantity);
             tvItemPrice = (TextView)itemView.findViewById(R.id.price);
+            buttonSale = (ImageView)itemView.findViewById(R.id.sale);
+            buttonSale.setOnClickListener(this);
+            itemView.setOnClickListener(this);
 
+        }
+
+        @Override
+        public void onClick(View v) {
+            if(v.getId() == R.id.sale)
+                mSalesButtonListener.salesButtonOnClick(getAdapterPosition());
+            else
+                mInventoryItemListener.inventoryItemOnClick(getAdapterPosition());
         }
     }
 }

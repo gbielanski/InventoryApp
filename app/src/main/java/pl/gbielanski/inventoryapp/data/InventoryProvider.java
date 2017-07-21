@@ -29,12 +29,13 @@ public class InventoryProvider extends ContentProvider {
     private InventoryDBHelper mDbHelper;
 
 
-    public static UriMatcher buildUriMatcher(){
+    public static UriMatcher buildUriMatcher() {
         UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         uriMatcher.addURI(InventoryItemContract.CONTENT_AUTHORITY, PATH_INVENTORY_ITEMS, CODE_ITEMS);
         uriMatcher.addURI(InventoryItemContract.CONTENT_AUTHORITY, PATH_INVENTORY_ITEMS + "/#", CODE_ITEM_ID);
         return uriMatcher;
     }
+
     @Override
     public boolean onCreate() {
         mDbHelper = new InventoryDBHelper(getContext());
@@ -55,7 +56,7 @@ public class InventoryProvider extends ContentProvider {
                 break;
             case CODE_ITEM_ID:
                 selection = InventoryItemEntry._ID + "=?";
-                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
 
                 cursor = database.query(TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
@@ -125,7 +126,7 @@ public class InventoryProvider extends ContentProvider {
                 break;
             case CODE_ITEM_ID:
                 selection = InventoryItemEntry._ID + "=?";
-                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 rowsDeleted = database.delete(TABLE_NAME, selection, selectionArgs);
                 break;
             default:
@@ -141,6 +142,31 @@ public class InventoryProvider extends ContentProvider {
 
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
-        throw new UnsupportedOperationException("Update is not supported operation");
+
+        Integer quantity = values.getAsInteger(COLUMN_ITEM_QUANTITY);
+        if (quantity == null || (quantity != quantity) && quantity < 0) {
+            throw new IllegalArgumentException("Item requires valid quantity");
+        }
+        int rowsUpdated = 0;
+
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case CODE_ITEMS:
+                //Nothing yet
+                break;
+            case CODE_ITEM_ID:
+                selection = InventoryItemEntry._ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                rowsUpdated = database.update(TABLE_NAME, values, selection, selectionArgs);
+                break;
+            default:
+                throw new IllegalArgumentException("Deletion is not supported for " + uri);
+        }
+
+        if (rowsUpdated != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+        return rowsUpdated;
     }
 }
