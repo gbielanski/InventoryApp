@@ -33,6 +33,9 @@ class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.InventoryHo
 
     @Override
     public int getItemCount() {
+        if(mCursor == null)
+            return 0;
+
         return mCursor.getCount();
     }
 

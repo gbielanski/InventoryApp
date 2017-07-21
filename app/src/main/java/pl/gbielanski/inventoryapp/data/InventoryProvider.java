@@ -92,7 +92,7 @@ public class InventoryProvider extends ContentProvider {
         }
 
         Integer count = contentValues.getAsInteger(COLUMN_ITEM_COUNT);
-        if (count != null || count < 0) {
+        if (count != null && count < 0) {
             throw new IllegalArgumentException("Item requires valid count");
         }
 
