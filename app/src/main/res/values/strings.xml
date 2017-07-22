@@ -21,4 +21,7 @@
     <string name="editor_delete_item_successful">Item deleted</string>
     <string name="editor_delete_item_failed">Error with deleting item</string>
     <string name="empty_list_information">Use add button to create new item.</string>
+    <string name="unsaved_changes_dialog_msg">Discard your changes and quit editing?</string>
+    <string name="discard">Discard</string>
+    <string name="keep_editing">Keep Editing</string>
 </resources>

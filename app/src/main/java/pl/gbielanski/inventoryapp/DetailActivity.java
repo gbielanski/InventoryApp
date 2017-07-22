@@ -36,7 +36,6 @@ public class DetailActivity extends AppCompatActivity implements
     private EditText mEditTextName;
     private EditText mEditTextPrice;
     private EditText mEditTextQuantity;
-    private boolean mItemHasChanged = false;
 
     private View.OnClickListener mSaveButtonListener = new View.OnClickListener() {
         @Override
@@ -243,8 +242,6 @@ public class DetailActivity extends AppCompatActivity implements
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu options from the res/menu/menu_editor.xml file.
-        // This adds menu items to the app bar.
         getMenuInflater().inflate(R.menu.menu_edit, menu);
         return true;
     }
@@ -261,13 +258,12 @@ public class DetailActivity extends AppCompatActivity implements
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // User clicked on a menu option in the app bar overflow menu
         switch (item.getItemId()) {
             case R.id.action_delete:
                 showDeleteConfirmationDialog();
                 return true;
             case android.R.id.home:
-                if (!mItemHasChanged) {
+                if (!hasItemChanged()) {
                     NavUtils.navigateUpFromSameTask(DetailActivity.this);
                     return true;
                 }
@@ -276,14 +272,55 @@ public class DetailActivity extends AppCompatActivity implements
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                // User clicked "Discard" button, navigate to parent activity.
                                 NavUtils.navigateUpFromSameTask(DetailActivity.this);
                             }
                         };
-
+                showUnsavedChangesDialog(discardButtonClickListener);
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showUnsavedChangesDialog(
+            DialogInterface.OnClickListener discardButtonClickListener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.unsaved_changes_dialog_msg);
+        builder.setPositiveButton(R.string.discard, discardButtonClickListener);
+        builder.setNegativeButton(R.string.keep_editing, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!hasItemChanged()) {
+            super.onBackPressed();
+            return;
+        }
+
+        DialogInterface.OnClickListener discardButtonClickListener =
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finish();
+                    }
+                };
+
+        showUnsavedChangesDialog(discardButtonClickListener);
+    }
+
+    private boolean hasItemChanged() {
+        String price = mEditTextPrice.getText().toString();
+        String qunatity = mEditTextQuantity.getText().toString();
+        String name = mEditTextName.getText().toString();
+        return !TextUtils.isEmpty(price) || !TextUtils.isEmpty(qunatity) || !TextUtils.isEmpty(name);
     }
 
     private void showDeleteConfirmationDialog() {
