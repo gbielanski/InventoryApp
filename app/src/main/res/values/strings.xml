@@ -20,4 +20,5 @@
     <string name="delete_dialog_msg">Delete this inventory item?</string>
     <string name="editor_delete_item_successful">Item deleted</string>
     <string name="editor_delete_item_failed">Error with deleting item</string>
+    <string name="empty_list_information">Use add button to create new item.</string>
 </resources>

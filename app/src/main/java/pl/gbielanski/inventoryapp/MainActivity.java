@@ -12,15 +12,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry;
 
+import static android.view.View.GONE;
 import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry.COLUMN_ITEM_QUANTITY;
-import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry.COLUMN_ITEM_NAME;
-import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry.COLUMN_ITEM_PRICE;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>,
         InventoryAdapter.OnButtonSalesListener, InventoryAdapter.OnInventoryItemListener {
@@ -34,17 +33,22 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             startActivity(intent);
         }
     };
+    private TextView mEmptyListTextView;
+    private RecyclerView mInventoryList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        RecyclerView rcInventoryList = (RecyclerView) findViewById(R.id.rc_inventory_list);
+        mInventoryList = (RecyclerView) findViewById(R.id.rc_inventory_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        rcInventoryList.setLayoutManager(layoutManager);
+        mInventoryList.setLayoutManager(layoutManager);
         mAdapter = new InventoryAdapter(this, this, this);
-        rcInventoryList.setAdapter(mAdapter);
+        mEmptyListTextView = (TextView)findViewById(R.id.empty_list_textview);
+        mEmptyListTextView.setVisibility(View.VISIBLE);
+        mInventoryList.setAdapter(mAdapter);
+        mInventoryList.setVisibility(GONE);
         getLoaderManager().initLoader(LOADER_ID, null, this);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -70,9 +74,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mAdapter.setData(data);
-        mAdapter.notifyDataSetChanged();
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+
+        if(cursor.getCount() > 0) {
+            mEmptyListTextView.setVisibility(GONE);
+            mInventoryList.setVisibility(View.VISIBLE);
+            mAdapter.setData(cursor);
+            mAdapter.notifyDataSetChanged();
+        }else{
+            mEmptyListTextView.setVisibility(View.VISIBLE);
+            mInventoryList.setVisibility(GONE);
+        }
     }
 
     @Override
