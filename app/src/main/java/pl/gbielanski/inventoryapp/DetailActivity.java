@@ -31,12 +31,24 @@ public class DetailActivity extends AppCompatActivity implements
     private EditText mEditTextPrice;
     private EditText mEditTextQuantity;
     private Button mSaveButton;
+    private Button mOrderButton;
     private View.OnClickListener mSaveButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             insertInventoryItem();
         }
     };
+
+    private View.OnClickListener  mOrderButtonListener= new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            orderFromSupplier();
+        }
+    };
+
+    private void orderFromSupplier() {
+        Toast.makeText(DetailActivity.this, R.string.item_ordered, Toast.LENGTH_LONG).show();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +59,7 @@ public class DetailActivity extends AppCompatActivity implements
         mEditTextPrice = (EditText)findViewById(R.id.detail_price);
         mEditTextQuantity = (EditText)findViewById(R.id.detail_quantity);
         mSaveButton = (Button)findViewById(R.id.save_button);
+        mOrderButton = (Button)findViewById(R.id.order_button);
 
         Intent intent = getIntent();
         Uri uri = intent.getData();
@@ -58,6 +71,7 @@ public class DetailActivity extends AppCompatActivity implements
             mEditTextQuantity.setEnabled(true);
             mSaveButton.setVisibility(View.VISIBLE);
             mSaveButton.setOnClickListener(mSaveButtonListener);
+            mOrderButton.setVisibility(View.GONE);
         }
         else {
             setTitle(getString(R.string.title_details));
@@ -66,6 +80,8 @@ public class DetailActivity extends AppCompatActivity implements
             mEditTextName.setEnabled(false);
             mEditTextPrice.setEnabled(false);
             mEditTextQuantity.setEnabled(false);
+            mOrderButton.setVisibility(View.VISIBLE);
+            mOrderButton.setOnClickListener(mOrderButtonListener);
             mSaveButton.setVisibility(View.GONE);
 
             getLoaderManager().initLoader(LOADER_ID, null, this);

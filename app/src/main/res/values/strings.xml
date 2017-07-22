@@ -12,4 +12,6 @@
     <string name="quantity_must_be_a_number">Quantity must be a number!</string>
     <string name="price_cannot_be_empty">Price field cannot be empty!</string>
     <string name="price_must_be_a_number">Price must be a number!</string>
+    <string name="order_button_label">Order</string>
+    <string name="item_ordered">Item ordered from supplier</string>
 </resources>

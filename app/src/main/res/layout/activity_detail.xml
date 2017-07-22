@@ -41,11 +41,30 @@
 
         <EditText
             android:id="@+id/detail_quantity"
-            android:layout_width="wrap_content"
+            android:layout_width="72dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/list_tiny_padding"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             tools:text="2" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginRight="@dimen/list_big_padding"
+                android:src="@drawable/ic_add_circle_outline_black_48px" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_remove_circle_outline_black_48px" />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -77,11 +96,21 @@
         android:layout_marginBottom="@dimen/list_small_padding"
         android:src="@mipmap/ic_launcher_round" />
 
-    <Button
-        android:id="@+id/save_button"
+    <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="@string/save_button_label" />
+        android:layout_gravity="center_horizontal">
 
+        <Button
+            android:id="@+id/save_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/save_button_label" />
+
+        <Button
+            android:id="@+id/order_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/order_button_label" />
+    </FrameLayout>
 </LinearLayout>
