@@ -45,25 +45,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         rcInventoryList.setLayoutManager(layoutManager);
         mAdapter = new InventoryAdapter(this, this, this);
         rcInventoryList.setAdapter(mAdapter);
-        //insertDummyData();
         getLoaderManager().initLoader(LOADER_ID, null, this);
 
         FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab);
         fab.setOnClickListener(fabListener);
 
-    }
-
-    private void insertDummyData() {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(COLUMN_ITEM_NAME, "Pencils");
-        contentValues.put(COLUMN_ITEM_QUANTITY, 1);
-        contentValues.put(COLUMN_ITEM_PRICE, 2);
-        Uri uri = getContentResolver().insert(InventoryItemEntry.CONTENT_URI, contentValues);
-
-        if(uri == null)
-            Log.v(LOG_TAG, "Inserting dummy data error");
-        else
-            Log.v(LOG_TAG, "Data inserted " + uri.toString());
     }
 
     @Override
