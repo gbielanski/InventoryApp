@@ -13,6 +13,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry.COLUMN_ITEM_NAME;
@@ -30,8 +31,6 @@ public class DetailActivity extends AppCompatActivity implements
     private EditText mEditTextName;
     private EditText mEditTextPrice;
     private EditText mEditTextQuantity;
-    private Button mSaveButton;
-    private Button mOrderButton;
     private View.OnClickListener mSaveButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -39,12 +38,50 @@ public class DetailActivity extends AppCompatActivity implements
         }
     };
 
-    private View.OnClickListener  mOrderButtonListener= new View.OnClickListener() {
+    private View.OnClickListener mOrderButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             orderFromSupplier();
         }
     };
+
+    private View.OnClickListener mIncreaseListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            String quantityString = mEditTextQuantity.getText().toString();
+            Integer quantity = 0;
+            try {
+                if(!TextUtils.isEmpty(quantityString))
+                    quantity = Integer.parseInt(quantityString);
+            }catch (NumberFormatException e){
+                Toast.makeText(DetailActivity.this, R.string.quantity_must_be_a_number, Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            quantity++;
+            mEditTextQuantity.setText(quantity.toString());
+        }
+    };
+
+    private View.OnClickListener mDecreaseListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            String quantityString = mEditTextQuantity.getText().toString();
+            Integer quantity = 0;
+            try {
+                if(!TextUtils.isEmpty(quantityString))
+                    quantity = Integer.parseInt(quantityString);
+            }catch (NumberFormatException e){
+                Toast.makeText(DetailActivity.this, R.string.quantity_must_be_a_number, Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            if(quantity > 0)
+                quantity--;
+            mEditTextQuantity.setText(quantity.toString());
+        }
+    };
+    private Cursor mCursor;
 
     private void orderFromSupplier() {
         Toast.makeText(DetailActivity.this, R.string.item_ordered, Toast.LENGTH_LONG).show();
@@ -55,16 +92,21 @@ public class DetailActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        mEditTextName = (EditText)findViewById(R.id.detail_name);
-        mEditTextPrice = (EditText)findViewById(R.id.detail_price);
-        mEditTextQuantity = (EditText)findViewById(R.id.detail_quantity);
-        mSaveButton = (Button)findViewById(R.id.save_button);
-        mOrderButton = (Button)findViewById(R.id.order_button);
+        mEditTextName = (EditText) findViewById(R.id.detail_name);
+        mEditTextPrice = (EditText) findViewById(R.id.detail_price);
+        mEditTextQuantity = (EditText) findViewById(R.id.detail_quantity);
+        Button mSaveButton = (Button) findViewById(R.id.save_button);
+        Button mOrderButton = (Button) findViewById(R.id.order_button);
+        ImageView mIncreaseButton = (ImageView) findViewById(R.id.increase);
+        ImageView mDecreaseButton = (ImageView) findViewById(R.id.decrease);
+
+        mIncreaseButton.setOnClickListener(mIncreaseListener);
+        mDecreaseButton.setOnClickListener(mDecreaseListener);
 
         Intent intent = getIntent();
         Uri uri = intent.getData();
 
-        if(uri == null) {
+        if (uri == null) {
             setTitle(getString(R.string.title_add));
             mEditTextName.setEnabled(true);
             mEditTextPrice.setEnabled(true);
@@ -72,8 +114,7 @@ public class DetailActivity extends AppCompatActivity implements
             mSaveButton.setVisibility(View.VISIBLE);
             mSaveButton.setOnClickListener(mSaveButtonListener);
             mOrderButton.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             setTitle(getString(R.string.title_details));
             mCurrentUri = uri;
 
@@ -92,33 +133,33 @@ public class DetailActivity extends AppCompatActivity implements
         ContentValues cv = new ContentValues();
 
         String name = mEditTextName.getText().toString();
-        if(TextUtils.isEmpty(name)){
+        if (TextUtils.isEmpty(name)) {
             Toast.makeText(this, R.string.name_cannot_be_empty, Toast.LENGTH_LONG).show();
             return;
         }
 
         String quantity = mEditTextQuantity.getText().toString();
-        if(TextUtils.isEmpty(quantity)){
+        if (TextUtils.isEmpty(quantity)) {
             Toast.makeText(this, R.string.quantity_cannot_be_empty, Toast.LENGTH_LONG).show();
             return;
         }
 
         try {
             Integer.parseInt(quantity);
-        }catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             Toast.makeText(this, R.string.quantity_must_be_a_number, Toast.LENGTH_LONG).show();
             return;
         }
 
         String price = mEditTextPrice.getText().toString();
-        if(TextUtils.isEmpty(price)){
+        if (TextUtils.isEmpty(price)) {
             Toast.makeText(this, R.string.price_cannot_be_empty, Toast.LENGTH_LONG).show();
             return;
         }
 
         try {
             Integer.parseInt(price);
-        }catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             Toast.makeText(this, R.string.price_must_be_a_number, Toast.LENGTH_LONG).show();
             return;
         }
@@ -155,6 +196,7 @@ public class DetailActivity extends AppCompatActivity implements
             return;
         }
 
+        mCursor = cursor;
         if (cursor.moveToFirst()) {
             int columnNameIndex = cursor.getColumnIndex(COLUMN_ITEM_NAME);
             int columnQuantityIndex = cursor.getColumnIndex(COLUMN_ITEM_QUANTITY);
