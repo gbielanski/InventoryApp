@@ -60,6 +60,9 @@ public class DetailActivity extends AppCompatActivity implements
 
             quantity++;
             mEditTextQuantity.setText(quantity.toString());
+
+            if(mCurrentUri != null)
+                updateItemDetails(quantity);
         }
     };
 
@@ -79,8 +82,18 @@ public class DetailActivity extends AppCompatActivity implements
             if(quantity > 0)
                 quantity--;
             mEditTextQuantity.setText(quantity.toString());
+
+            if(mCurrentUri != null)
+                updateItemDetails(quantity);
         }
     };
+
+    private void updateItemDetails(Integer quantity) {
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_ITEM_QUANTITY, quantity);
+        getContentResolver().update(mCurrentUri, cv, null, null);
+    }
+
     private Cursor mCursor;
 
     private void orderFromSupplier() {
