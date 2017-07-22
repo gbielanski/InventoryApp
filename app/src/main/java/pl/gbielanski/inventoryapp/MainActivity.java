@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,6 +27,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public static final String LOG_TAG = MainActivity.class.getSimpleName();
     public static final int LOADER_ID = 1234;
     private InventoryAdapter mAdapter;
+    private View.OnClickListener fabListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+            startActivity(intent);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +47,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         rcInventoryList.setAdapter(mAdapter);
         insertDummyData();
         getLoaderManager().initLoader(LOADER_ID, null, this);
+
+        FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab);
+        fab.setOnClickListener(fabListener);
 
     }
 
@@ -88,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         cursor.moveToPosition(position);
         Integer quantity = cursor.getInt(cursor.getColumnIndex(COLUMN_ITEM_QUANTITY));
         if(quantity == 0)
-            Toast.makeText(this, "Item cannot be sold, quantity is zero", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.cannot_sold, Toast.LENGTH_LONG).show();
         else{
             quantity--;
             ContentValues cv = new ContentValues();
@@ -101,7 +112,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void inventoryItemOnClick(int position) {
+        Cursor cursor = mAdapter.getData();
+        cursor.moveToPosition(position);
+        int id = cursor.getInt(cursor.getColumnIndex(InventoryItemEntry._ID));
+        Uri uri = InventoryItemEntry.getContentUriForId(id);
         Intent intent = new Intent(this, DetailActivity.class);
+        intent.setData(uri);
         startActivity(intent);
     }
 }

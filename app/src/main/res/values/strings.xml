@@ -3,4 +3,8 @@
     <string name="quantity_label">Quantity:</string>
     <string name="price_label">Price:</string>
     <string name="name_label">Name:</string>
+    <string name="cannot_sold">Item cannot be sold, quantity is zero</string>
+    <string name="title_add">Add inventory item</string>
+    <string name="title_details">Inventory item details</string>
+    <string name="save_button_label">Save</string>
 </resources>
