@@ -7,4 +7,9 @@
     <string name="title_add">Add inventory item</string>
     <string name="title_details">Inventory item details</string>
     <string name="save_button_label">Save</string>
+    <string name="name_cannot_be_empty">Name field cannot be empty!</string>
+    <string name="quantity_cannot_be_empty">Quantity field cannot be empty!</string>
+    <string name="quantity_must_be_a_number">Quantity must be a number!</string>
+    <string name="price_cannot_be_empty">Price field cannot be empty!</string>
+    <string name="price_must_be_a_number">Price must be a number!</string>
 </resources>

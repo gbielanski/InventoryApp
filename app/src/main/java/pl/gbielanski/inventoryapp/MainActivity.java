@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         rcInventoryList.setLayoutManager(layoutManager);
         mAdapter = new InventoryAdapter(this, this, this);
         rcInventoryList.setAdapter(mAdapter);
-        insertDummyData();
+        //insertDummyData();
         getLoaderManager().initLoader(LOADER_ID, null, this);
 
         FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab);
