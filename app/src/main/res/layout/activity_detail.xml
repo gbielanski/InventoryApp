@@ -44,9 +44,9 @@
             android:layout_width="72dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/list_tiny_padding"
+            android:inputType="number"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            tools:text="2"
-            android:inputType="number"/>
+            tools:text="2" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -87,13 +87,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/list_tiny_padding"
+            android:inputType="number"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            tools:text="100"
-            android:inputType="number"/>
+            tools:text="100" />
     </LinearLayout>
 
 
     <ImageView
+        android:id="@+id/item_image"
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_gravity="center_horizontal"

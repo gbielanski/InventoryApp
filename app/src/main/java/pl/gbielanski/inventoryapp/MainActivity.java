@@ -1,11 +1,13 @@
 package pl.gbielanski.inventoryapp;
 
+import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +15,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +27,7 @@ import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryIte
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>,
         InventoryAdapter.OnButtonSalesListener, InventoryAdapter.OnInventoryItemListener {
     public static final String LOG_TAG = MainActivity.class.getSimpleName();
+
     public static final int LOADER_ID = 1234;
     private InventoryAdapter mAdapter;
     private View.OnClickListener fabListener = new View.OnClickListener() {
@@ -45,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mInventoryList.setLayoutManager(layoutManager);
         mAdapter = new InventoryAdapter(this, this, this);
-        mEmptyListTextView = (TextView)findViewById(R.id.empty_list_textview);
+        mEmptyListTextView = (TextView) findViewById(R.id.empty_list_textview);
         mEmptyListTextView.setVisibility(View.VISIBLE);
         mInventoryList.setAdapter(mAdapter);
         mInventoryList.setVisibility(GONE);
@@ -53,7 +57,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(fabListener);
-
     }
 
     @Override
@@ -76,12 +79,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
 
-        if(cursor.getCount() > 0) {
+        if (cursor.getCount() > 0) {
             mEmptyListTextView.setVisibility(GONE);
             mInventoryList.setVisibility(View.VISIBLE);
             mAdapter.setData(cursor);
             mAdapter.notifyDataSetChanged();
-        }else{
+        } else {
             mEmptyListTextView.setVisibility(View.VISIBLE);
             mInventoryList.setVisibility(GONE);
         }

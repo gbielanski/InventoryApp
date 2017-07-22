@@ -1,5 +1,6 @@
 package pl.gbielanski.inventoryapp;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.LoaderManager;
 import android.content.ContentValues;
@@ -8,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +23,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
+
 import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry.COLUMN_ITEM_NAME;
 import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry.COLUMN_ITEM_PICTURE;
 import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry.COLUMN_ITEM_PRICE;
@@ -31,11 +35,13 @@ import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryIte
 public class DetailActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
+    private static final int CAMERA_REQUEST = 1;
     public static final int LOADER_ID = 123;
     Uri mCurrentUri;
     private EditText mEditTextName;
     private EditText mEditTextPrice;
     private EditText mEditTextQuantity;
+    private ImageView mItemImage;
 
     private View.OnClickListener mSaveButtonListener = new View.OnClickListener() {
         @Override
@@ -57,9 +63,9 @@ public class DetailActivity extends AppCompatActivity implements
             String quantityString = mEditTextQuantity.getText().toString();
             Integer quantity = 0;
             try {
-                if(!TextUtils.isEmpty(quantityString))
+                if (!TextUtils.isEmpty(quantityString))
                     quantity = Integer.parseInt(quantityString);
-            }catch (NumberFormatException e){
+            } catch (NumberFormatException e) {
                 Toast.makeText(DetailActivity.this, R.string.quantity_must_be_a_number, Toast.LENGTH_LONG).show();
                 return;
             }
@@ -67,7 +73,7 @@ public class DetailActivity extends AppCompatActivity implements
             quantity++;
             mEditTextQuantity.setText(quantity.toString());
 
-            if(mCurrentUri != null)
+            if (mCurrentUri != null)
                 updateItemDetails(quantity);
         }
     };
@@ -78,18 +84,18 @@ public class DetailActivity extends AppCompatActivity implements
             String quantityString = mEditTextQuantity.getText().toString();
             Integer quantity = 0;
             try {
-                if(!TextUtils.isEmpty(quantityString))
+                if (!TextUtils.isEmpty(quantityString))
                     quantity = Integer.parseInt(quantityString);
-            }catch (NumberFormatException e){
+            } catch (NumberFormatException e) {
                 Toast.makeText(DetailActivity.this, R.string.quantity_must_be_a_number, Toast.LENGTH_LONG).show();
                 return;
             }
 
-            if(quantity > 0)
+            if (quantity > 0)
                 quantity--;
             mEditTextQuantity.setText(quantity.toString());
 
-            if(mCurrentUri != null)
+            if (mCurrentUri != null)
                 updateItemDetails(quantity);
         }
     };
@@ -147,6 +153,28 @@ public class DetailActivity extends AppCompatActivity implements
             mSaveButton.setVisibility(View.GONE);
 
             getLoaderManager().initLoader(LOADER_ID, null, this);
+        }
+
+        mItemImage = (ImageView)findViewById(R.id.item_image);
+        mItemImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(cameraIntent, CAMERA_REQUEST);
+            }
+        });
+    }
+
+    public static byte[] getBitmapAsByteArray(Bitmap bitmap) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 0, outputStream);
+        return outputStream.toByteArray();
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            mItemImage.setImageBitmap(photo);
         }
     }
 
