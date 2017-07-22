@@ -16,6 +16,8 @@ import pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry;
 import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry.COLUMN_ITEM_QUANTITY;
 import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry.COLUMN_ITEM_NAME;
 import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry.COLUMN_ITEM_PRICE;
+import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry.CONTENT_LIST_TYPE;
+import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry.CONTENT_ITEM_TYPE;
 import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry.TABLE_NAME;
 import static pl.gbielanski.inventoryapp.data.InventoryItemContract.PATH_INVENTORY_ITEMS;
 
@@ -71,7 +73,15 @@ public class InventoryProvider extends ContentProvider {
     @Nullable
     @Override
     public String getType(@NonNull Uri uri) {
-        return null;
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case CODE_ITEMS:
+                return CONTENT_LIST_TYPE;
+            case CODE_ITEM_ID:
+                return CONTENT_ITEM_TYPE;
+            default:
+                throw new IllegalStateException("Unknown URI " + uri + " with match " + match);
+        }
     }
 
     @Nullable

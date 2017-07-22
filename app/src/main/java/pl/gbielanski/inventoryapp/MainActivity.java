@@ -40,14 +40,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        RecyclerView rcInventoryList = (RecyclerView)findViewById(R.id.rc_inventory_list);
+        RecyclerView rcInventoryList = (RecyclerView) findViewById(R.id.rc_inventory_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         rcInventoryList.setLayoutManager(layoutManager);
         mAdapter = new InventoryAdapter(this, this, this);
         rcInventoryList.setAdapter(mAdapter);
         getLoaderManager().initLoader(LOADER_ID, null, this);
 
-        FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(fabListener);
 
     }
@@ -84,9 +84,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         Cursor cursor = mAdapter.getData();
         cursor.moveToPosition(position);
         Integer quantity = cursor.getInt(cursor.getColumnIndex(COLUMN_ITEM_QUANTITY));
-        if(quantity == 0)
+        if (quantity == 0)
             Toast.makeText(this, R.string.cannot_sold, Toast.LENGTH_LONG).show();
-        else{
+        else {
             quantity--;
             ContentValues cv = new ContentValues();
             cv.put(COLUMN_ITEM_QUANTITY, quantity);
