@@ -4,7 +4,7 @@
     <string name="price_label">Price:</string>
     <string name="name_label">Name:</string>
     <string name="cannot_sold">Item cannot be sold, quantity is zero</string>
-    <string name="title_add">Add inventory item</string>
+    <string name="title_add">Add item</string>
     <string name="title_details">Inventory item details</string>
     <string name="save_button_label">Save</string>
     <string name="name_cannot_be_empty">Name field cannot be empty!</string>
@@ -14,4 +14,10 @@
     <string name="price_must_be_a_number">Price must be a number!</string>
     <string name="order_button_label">Order</string>
     <string name="item_ordered">Item ordered from supplier</string>
+    <string name="menu_item_delete_title">delete</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete_dialog_msg">Delete this inventory item?</string>
+    <string name="editor_delete_item_successful">Item deleted</string>
+    <string name="editor_delete_item_failed">Error with deleting item</string>
 </resources>
