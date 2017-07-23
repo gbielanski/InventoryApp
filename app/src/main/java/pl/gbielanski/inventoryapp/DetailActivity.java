@@ -15,6 +15,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.PersistableBundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
@@ -46,6 +47,7 @@ public class DetailActivity extends AppCompatActivity implements
     private static final int CAMERA_REQUEST = 1;
     public static final int LOADER_ID = 123;
     public static final int REQUEST_CALL_PHONE = 222;
+    public static final String IMAGE_KEY = "Image";
     private String LOG_TAG = DetailActivity.class.getSimpleName();
 
     Uri mCurrentUri;
@@ -109,6 +111,14 @@ public class DetailActivity extends AppCompatActivity implements
 
             if (mCurrentUri != null)
                 updateItemDetails(quantity);
+        }
+    };
+
+    private View.OnClickListener mImageOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(cameraIntent, CAMERA_REQUEST);
         }
     };
 
@@ -183,6 +193,12 @@ public class DetailActivity extends AppCompatActivity implements
         mIncreaseButton.setOnClickListener(mIncreaseListener);
         mDecreaseButton.setOnClickListener(mDecreaseListener);
 
+        mItemImage = (ImageView) findViewById(R.id.item_image);
+        if(savedInstanceState != null ){
+            Bitmap bitmap = savedInstanceState.getParcelable(IMAGE_KEY);
+            mItemImage.setImageBitmap(bitmap);
+        }
+
         Intent intent = getIntent();
         Uri uri = intent.getData();
 
@@ -196,6 +212,8 @@ public class DetailActivity extends AppCompatActivity implements
             mSaveButton.setVisibility(View.VISIBLE);
             mSaveButton.setOnClickListener(mSaveButtonListener);
             mOrderButton.setVisibility(View.GONE);
+            mItemImage.setOnClickListener(mImageOnClickListener);
+
         } else {
             setTitle(getString(R.string.title_details));
 
@@ -211,15 +229,6 @@ public class DetailActivity extends AppCompatActivity implements
 
             getLoaderManager().initLoader(LOADER_ID, null, this);
         }
-
-        mItemImage = (ImageView) findViewById(R.id.item_image);
-        mItemImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(cameraIntent, CAMERA_REQUEST);
-            }
-        });
     }
 
     public static byte[] getBitmapAsByteArray(Bitmap bitmap) {
@@ -463,5 +472,12 @@ public class DetailActivity extends AppCompatActivity implements
             }
         }
         finish();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        Bitmap bitmap = ((BitmapDrawable) mItemImage.getDrawable()).getBitmap();
+        outState.putParcelable(IMAGE_KEY, bitmap);
+        super.onSaveInstanceState(outState);
     }
 }
