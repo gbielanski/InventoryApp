@@ -123,6 +123,8 @@ public class DetailActivity extends AppCompatActivity implements
         }
     };
 
+    private boolean mImageSet = false;
+
     private void updateItemDetails(Integer quantity) {
         ContentValues cv = new ContentValues();
         cv.put(COLUMN_ITEM_QUANTITY, quantity);
@@ -238,6 +240,7 @@ public class DetailActivity extends AppCompatActivity implements
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
             Bitmap photo = (Bitmap) data.getExtras().get("data");
             mItemImage.setImageBitmap(photo);
+            mImageSet = true;
         }
     }
 
@@ -432,7 +435,7 @@ public class DetailActivity extends AppCompatActivity implements
         return !TextUtils.isEmpty(price) ||
                 !TextUtils.isEmpty(qunatity) ||
                 !TextUtils.isEmpty(name) ||
-                !TextUtils.isEmpty(supplier);
+                !TextUtils.isEmpty(supplier) || mImageSet;
     }
 
     private void showDeleteConfirmationDialog() {

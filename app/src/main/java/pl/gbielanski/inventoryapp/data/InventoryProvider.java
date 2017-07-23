@@ -13,6 +13,7 @@ import android.util.Log;
 
 import pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry;
 
+import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry.COLUMN_ITEM_PICTURE;
 import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry.COLUMN_ITEM_QUANTITY;
 import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry.COLUMN_ITEM_NAME;
 import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry.COLUMN_ITEM_PRICE;
@@ -116,6 +117,11 @@ public class InventoryProvider extends ContentProvider {
         String supplier = contentValues.getAsString(COLUMN_ITEM_SUPPLIER);
         if (supplier == null) {
             throw new IllegalArgumentException("Item requires supplier details");
+        }
+
+        byte [] picture = contentValues.getAsByteArray(COLUMN_ITEM_PICTURE);
+        if (picture == null) {
+            throw new IllegalArgumentException("Item requires image");
         }
 
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
