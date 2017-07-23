@@ -32,6 +32,7 @@ public class InventoryItemContract {
         public final static String COLUMN_ITEM_QUANTITY = "quantity";
         public final static String COLUMN_ITEM_PRICE = "price";
         public final static String COLUMN_ITEM_PICTURE = "picture";
+        public final static String COLUMN_ITEM_SUPPLIER = "supplier";
 
         public static Uri getContentUriForId(int id){
             return Uri.withAppendedPath(CONTENT_URI, String.valueOf(id));

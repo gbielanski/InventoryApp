@@ -1,5 +1,6 @@
 package pl.gbielanski.inventoryapp;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.LoaderManager;
@@ -8,13 +9,18 @@ import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,12 +29,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
 import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry.COLUMN_ITEM_NAME;
 import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry.COLUMN_ITEM_PICTURE;
 import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry.COLUMN_ITEM_PRICE;
 import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry.COLUMN_ITEM_QUANTITY;
+import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry.COLUMN_ITEM_SUPPLIER;
 import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry.CONTENT_URI;
 import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry._ID;
 
@@ -37,10 +45,14 @@ public class DetailActivity extends AppCompatActivity implements
 
     private static final int CAMERA_REQUEST = 1;
     public static final int LOADER_ID = 123;
+    public static final int REQUEST_CALL_PHONE = 222;
+    private String LOG_TAG = DetailActivity.class.getSimpleName();
+
     Uri mCurrentUri;
     private EditText mEditTextName;
     private EditText mEditTextPrice;
     private EditText mEditTextQuantity;
+    private EditText mEditTextSupplier;
     private ImageView mItemImage;
 
     private View.OnClickListener mSaveButtonListener = new View.OnClickListener() {
@@ -109,8 +121,50 @@ public class DetailActivity extends AppCompatActivity implements
     private Cursor mCursor;
 
     private void orderFromSupplier() {
-        Toast.makeText(DetailActivity.this, R.string.item_ordered, Toast.LENGTH_LONG).show();
+
+        Intent intent = new Intent(Intent.ACTION_CALL);
+        intent.setData(Uri.parse("tel:" + mEditTextSupplier.getText().toString()));
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.CALL_PHONE)) {
+
+                Toast.makeText(this, R.string.permission_required, Toast.LENGTH_LONG).show();
+            } else {
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.CALL_PHONE},
+                        REQUEST_CALL_PHONE);
+            }
+            return;
+        }
+        startActivity(intent);
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CALL_PHONE: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    Intent intent = new Intent(Intent.ACTION_CALL);
+                    intent.setData(Uri.parse("tel:" + mEditTextSupplier.getText().toString()));
+                    try {
+                        startActivity(intent);
+                    }catch(SecurityException e){
+                        Log.v(LOG_TAG, "SecurityException");
+                    }
+                } else {
+                    Toast.makeText(this, R.string.cannot_granted, Toast.LENGTH_LONG).show();
+                }
+                return;
+            }
+        }
+    }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +174,7 @@ public class DetailActivity extends AppCompatActivity implements
         mEditTextName = (EditText) findViewById(R.id.detail_name);
         mEditTextPrice = (EditText) findViewById(R.id.detail_price);
         mEditTextQuantity = (EditText) findViewById(R.id.detail_quantity);
+        mEditTextSupplier = (EditText) findViewById(R.id.supplier_number);
         Button mSaveButton = (Button) findViewById(R.id.save_button);
         Button mOrderButton = (Button) findViewById(R.id.order_button);
         ImageView mIncreaseButton = (ImageView) findViewById(R.id.increase);
@@ -137,6 +192,7 @@ public class DetailActivity extends AppCompatActivity implements
             mEditTextName.setEnabled(true);
             mEditTextPrice.setEnabled(true);
             mEditTextQuantity.setEnabled(true);
+            mEditTextSupplier.setEnabled(true);
             mSaveButton.setVisibility(View.VISIBLE);
             mSaveButton.setOnClickListener(mSaveButtonListener);
             mOrderButton.setVisibility(View.GONE);
@@ -148,6 +204,7 @@ public class DetailActivity extends AppCompatActivity implements
             mEditTextName.setEnabled(false);
             mEditTextPrice.setEnabled(false);
             mEditTextQuantity.setEnabled(false);
+            mEditTextSupplier.setEnabled(false);
             mOrderButton.setVisibility(View.VISIBLE);
             mOrderButton.setOnClickListener(mOrderButtonListener);
             mSaveButton.setVisibility(View.GONE);
@@ -155,7 +212,7 @@ public class DetailActivity extends AppCompatActivity implements
             getLoaderManager().initLoader(LOADER_ID, null, this);
         }
 
-        mItemImage = (ImageView)findViewById(R.id.item_image);
+        mItemImage = (ImageView) findViewById(R.id.item_image);
         mItemImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -212,11 +269,18 @@ public class DetailActivity extends AppCompatActivity implements
             Toast.makeText(this, R.string.price_must_be_a_number, Toast.LENGTH_LONG).show();
             return;
         }
+        String supplier = mEditTextSupplier.getText().toString();
+        if (TextUtils.isEmpty(supplier)) {
+            Toast.makeText(this, R.string.supplier_cannot_be_empty, Toast.LENGTH_LONG).show();
+            return;
+        }
 
         cv.put(COLUMN_ITEM_NAME, name);
         cv.put(COLUMN_ITEM_QUANTITY, quantity);
         cv.put(COLUMN_ITEM_PRICE, price);
-
+        Bitmap bitmap = ((BitmapDrawable) mItemImage.getDrawable()).getBitmap();
+        cv.put(COLUMN_ITEM_PICTURE, getBitmapAsByteArray(bitmap));
+        cv.put(COLUMN_ITEM_SUPPLIER, supplier);
         getContentResolver().insert(CONTENT_URI, cv);
         finish();
     }
@@ -228,7 +292,8 @@ public class DetailActivity extends AppCompatActivity implements
                 COLUMN_ITEM_NAME,
                 COLUMN_ITEM_PRICE,
                 COLUMN_ITEM_QUANTITY,
-                COLUMN_ITEM_PICTURE
+                COLUMN_ITEM_PICTURE,
+                COLUMN_ITEM_SUPPLIER
         };
 
         return new CursorLoader(this,
@@ -251,15 +316,23 @@ public class DetailActivity extends AppCompatActivity implements
             int columnQuantityIndex = cursor.getColumnIndex(COLUMN_ITEM_QUANTITY);
             int columnPriceIndex = cursor.getColumnIndex(COLUMN_ITEM_PRICE);
             int columnPictureIndex = cursor.getColumnIndex(COLUMN_ITEM_PICTURE);
+            int columnSupplierIndex = cursor.getColumnIndex(COLUMN_ITEM_SUPPLIER);
 
             String name = cursor.getString(columnNameIndex);
             Integer quantity = cursor.getInt(columnQuantityIndex);
             Integer price = cursor.getInt(columnPriceIndex);
-            String picture = cursor.getString(columnPictureIndex);
+            byte[] blob = cursor.getBlob(columnPictureIndex);
+            String supplier = cursor.getString(columnSupplierIndex);
+
+            ByteArrayInputStream imageStream = new ByteArrayInputStream(blob);
+            Bitmap picture = BitmapFactory.decodeStream(imageStream);
 
             mEditTextName.setText(name);
             mEditTextQuantity.setText(quantity.toString());
             mEditTextPrice.setText(price.toString());
+            mItemImage.setImageBitmap(picture);
+            mEditTextSupplier.setText(supplier);
+
         }
     }
 
@@ -309,8 +382,7 @@ public class DetailActivity extends AppCompatActivity implements
         return super.onOptionsItemSelected(item);
     }
 
-    private void showUnsavedChangesDialog(
-            DialogInterface.OnClickListener discardButtonClickListener) {
+    private void showUnsavedChangesDialog(DialogInterface.OnClickListener discardButtonClickListener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.unsaved_changes_dialog_msg);
         builder.setPositiveButton(R.string.discard, discardButtonClickListener);
@@ -345,10 +417,17 @@ public class DetailActivity extends AppCompatActivity implements
     }
 
     private boolean hasItemChanged() {
+        if (mCurrentUri != null)
+            return false;
+
         String price = mEditTextPrice.getText().toString();
         String qunatity = mEditTextQuantity.getText().toString();
         String name = mEditTextName.getText().toString();
-        return !TextUtils.isEmpty(price) || !TextUtils.isEmpty(qunatity) || !TextUtils.isEmpty(name);
+        String supplier = mEditTextSupplier.getText().toString();
+        return !TextUtils.isEmpty(price) ||
+                !TextUtils.isEmpty(qunatity) ||
+                !TextUtils.isEmpty(name) ||
+                !TextUtils.isEmpty(supplier);
     }
 
     private void showDeleteConfirmationDialog() {

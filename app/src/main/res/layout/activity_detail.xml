@@ -91,7 +91,27 @@
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             tools:text="100" />
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/list_small_padding">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/supplier_label"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/supplier_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/list_tiny_padding"
+            android:inputType="number"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            tools:text="100" />
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/item_image"

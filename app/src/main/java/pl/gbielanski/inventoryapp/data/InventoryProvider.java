@@ -16,6 +16,7 @@ import pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry;
 import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry.COLUMN_ITEM_QUANTITY;
 import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry.COLUMN_ITEM_NAME;
 import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry.COLUMN_ITEM_PRICE;
+import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry.COLUMN_ITEM_SUPPLIER;
 import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry.CONTENT_LIST_TYPE;
 import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry.CONTENT_ITEM_TYPE;
 import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry.TABLE_NAME;
@@ -111,6 +112,12 @@ public class InventoryProvider extends ContentProvider {
         if (price != null && price < 0) {
             throw new IllegalArgumentException("Item requires valid price");
         }
+
+        String supplier = contentValues.getAsString(COLUMN_ITEM_SUPPLIER);
+        if (supplier == null) {
+            throw new IllegalArgumentException("Item requires supplier details");
+        }
+
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
 
         long id = database.insert(TABLE_NAME, null, contentValues);
@@ -163,7 +170,7 @@ public class InventoryProvider extends ContentProvider {
         final int match = sUriMatcher.match(uri);
         switch (match) {
             case CODE_ITEMS:
-                //Nothing yet
+                rowsUpdated = database.update(TABLE_NAME, values, selection, selectionArgs);
                 break;
             case CODE_ITEM_ID:
                 selection = InventoryItemEntry._ID + "=?";

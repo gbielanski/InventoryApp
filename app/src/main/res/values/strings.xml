@@ -24,4 +24,8 @@
     <string name="unsaved_changes_dialog_msg">Discard your changes and quit editing?</string>
     <string name="discard">Discard</string>
     <string name="keep_editing">Keep Editing</string>
+    <string name="supplier_label">Supplier number:</string>
+    <string name="supplier_cannot_be_empty">Name field cannot be empty!</string>
+    <string name="cannot_granted">Cannot make the order. Calling permission not granted.</string>
+    <string name="permission_required">Call phone permission required to perform order!</string>
 </resources>
