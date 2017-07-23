@@ -18,14 +18,15 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="@dimen/list_small_padding"
-            android:background="@drawable/remove_button_effect" />
+            android:background="@drawable/remove_button_effect"
+            android:contentDescription="@string/decrease_quantity"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginStart="@dimen/list_big_padding"
             android:layout_marginLeft="@dimen/list_big_padding"
+            android:layout_marginStart="@dimen/list_big_padding"
             android:orientation="vertical"
             android:paddingBottom="@dimen/list_tiny_padding"
             android:paddingEnd="@dimen/list_small_padding"
@@ -52,19 +53,19 @@
                     android:layout_marginStart="@dimen/list_small_padding"
                     android:gravity="start"
                     android:minWidth="130dp"
-                    tools:text="100 000"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"/>
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                    tools:text="100 000" />
 
                 <TextView
                     android:id="@+id/price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="end"
                     android:layout_marginLeft="@dimen/list_small_padding"
                     android:layout_marginStart="@dimen/list_small_padding"
                     android:minWidth="150dp"
-                    tools:text="100"
-                    android:layout_gravity="end"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"/>
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                    tools:text="100" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

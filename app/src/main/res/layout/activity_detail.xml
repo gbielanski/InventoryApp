@@ -24,7 +24,8 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/list_tiny_padding"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            tools:text="Pencils" />
+            tools:text="Pencils"
+            android:inputType="text"/>
     </LinearLayout>
 
     <LinearLayout
@@ -59,14 +60,16 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginRight="@dimen/list_big_padding"
-                android:background="@drawable/add_button_effect"/>
+                android:background="@drawable/add_button_effect"
+                android:contentDescription="@string/increase_quantity"/>
 
             <ImageView
                 android:id="@+id/decrease"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:background="@drawable/remove_button_effect" />
+                android:background="@drawable/remove_button_effect"
+                android:contentDescription="@string/decrease_quantity"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -91,6 +94,7 @@
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             tools:text="100" />
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -119,7 +123,8 @@
         android:layout_height="200dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="@dimen/list_small_padding"
-        android:src="@mipmap/ic_launcher_round" />
+        android:src="@mipmap/ic_launcher_round"
+        android:contentDescription="@string/inventory_item_photo"/>
 
     <FrameLayout
         android:layout_width="wrap_content"

@@ -4,12 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    android:padding="@dimen/list_small_padding">
+    android:padding="@dimen/list_small_padding"
+    android:baselineAligned="false">
 
     <LinearLayout
         android:layout_width="0dp"
-        android:layout_weight="1"
         android:layout_height="match_parent"
+        android:layout_weight="1"
         android:orientation="vertical">
 
         <LinearLayout
@@ -30,7 +31,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/list_tiny_padding"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-                tools:text="Pencils" />
+                tools:text="Pencils"
+                android:inputType="text"/>
         </LinearLayout>
 
         <LinearLayout
@@ -65,14 +67,16 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginRight="@dimen/list_big_padding"
-                    android:background="@drawable/add_button_effect" />
+                    android:background="@drawable/add_button_effect"
+                    android:contentDescription="@string/increase_quantity"/>
 
                 <ImageView
                     android:id="@+id/decrease"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:background="@drawable/remove_button_effect" />
+                    android:background="@drawable/remove_button_effect"
+                    android:contentDescription="@string/decrease_quantity"/>
             </LinearLayout>
         </LinearLayout>
 
@@ -123,26 +127,27 @@
 
     <RelativeLayout
         android:layout_width="0dp"
-        android:layout_weight="1"
         android:layout_height="match_parent"
+        android:layout_weight="1"
         android:orientation="vertical">
 
         <ImageView
             android:id="@+id/item_image"
             android:layout_width="150dp"
             android:layout_height="150dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="@dimen/list_small_padding"
             android:src="@mipmap/ic_launcher_round"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"/>
+            android:contentDescription="@string/inventory_item_photo"/>
 
         <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true">
+            android:layout_gravity="center_horizontal">
 
             <Button
                 android:id="@+id/save_button"

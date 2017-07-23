@@ -15,6 +15,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Parcelable;
 import android.os.PersistableBundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
@@ -45,33 +46,33 @@ public class DetailActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int CAMERA_REQUEST = 1;
-    public static final int LOADER_ID = 123;
-    public static final int REQUEST_CALL_PHONE = 222;
-    public static final String IMAGE_KEY = "Image";
-    private String LOG_TAG = DetailActivity.class.getSimpleName();
+    private static final int LOADER_ID = 123;
+    private static final int REQUEST_CALL_PHONE = 222;
+    private static final String IMAGE_KEY = "Image";
+    private final String LOG_TAG = DetailActivity.class.getSimpleName();
 
-    Uri mCurrentUri;
+    private Uri mCurrentUri;
     private EditText mEditTextName;
     private EditText mEditTextPrice;
     private EditText mEditTextQuantity;
     private EditText mEditTextSupplier;
     private ImageView mItemImage;
 
-    private View.OnClickListener mSaveButtonListener = new View.OnClickListener() {
+    private final View.OnClickListener mSaveButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             insertInventoryItem();
         }
     };
 
-    private View.OnClickListener mOrderButtonListener = new View.OnClickListener() {
+    private final View.OnClickListener mOrderButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             orderFromSupplier();
         }
     };
 
-    private View.OnClickListener mIncreaseListener = new View.OnClickListener() {
+    private final View.OnClickListener mIncreaseListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             String quantityString = mEditTextQuantity.getText().toString();
@@ -92,7 +93,7 @@ public class DetailActivity extends AppCompatActivity implements
         }
     };
 
-    private View.OnClickListener mDecreaseListener = new View.OnClickListener() {
+    private final View.OnClickListener mDecreaseListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             String quantityString = mEditTextQuantity.getText().toString();
@@ -114,7 +115,7 @@ public class DetailActivity extends AppCompatActivity implements
         }
     };
 
-    private View.OnClickListener mImageOnClickListener = new View.OnClickListener() {
+    private final View.OnClickListener mImageOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
@@ -127,8 +128,6 @@ public class DetailActivity extends AppCompatActivity implements
         cv.put(COLUMN_ITEM_QUANTITY, quantity);
         getContentResolver().update(mCurrentUri, cv, null, null);
     }
-
-    private Cursor mCursor;
 
     private void orderFromSupplier() {
 
@@ -163,17 +162,15 @@ public class DetailActivity extends AppCompatActivity implements
                     intent.setData(Uri.parse("tel:" + mEditTextSupplier.getText().toString()));
                     try {
                         startActivity(intent);
-                    }catch(SecurityException e){
+                    } catch (SecurityException e) {
                         Log.v(LOG_TAG, "SecurityException");
                     }
                 } else {
                     Toast.makeText(this, R.string.cannot_granted, Toast.LENGTH_LONG).show();
                 }
-                return;
             }
         }
     }
-
 
 
     @Override
@@ -194,7 +191,7 @@ public class DetailActivity extends AppCompatActivity implements
         mDecreaseButton.setOnClickListener(mDecreaseListener);
 
         mItemImage = (ImageView) findViewById(R.id.item_image);
-        if(savedInstanceState != null ){
+        if (savedInstanceState != null) {
             Bitmap bitmap = savedInstanceState.getParcelable(IMAGE_KEY);
             mItemImage.setImageBitmap(bitmap);
         }
@@ -231,7 +228,7 @@ public class DetailActivity extends AppCompatActivity implements
         }
     }
 
-    public static byte[] getBitmapAsByteArray(Bitmap bitmap) {
+    private static byte[] getBitmapAsByteArray(Bitmap bitmap) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 0, outputStream);
         return outputStream.toByteArray();
@@ -319,7 +316,6 @@ public class DetailActivity extends AppCompatActivity implements
             return;
         }
 
-        mCursor = cursor;
         if (cursor.moveToFirst()) {
             int columnNameIndex = cursor.getColumnIndex(COLUMN_ITEM_NAME);
             int columnQuantityIndex = cursor.getColumnIndex(COLUMN_ITEM_QUANTITY);

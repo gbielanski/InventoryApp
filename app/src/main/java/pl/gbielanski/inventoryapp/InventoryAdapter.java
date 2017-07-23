@@ -14,30 +14,30 @@ import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryIte
 import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry.COLUMN_ITEM_NAME;
 import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry.COLUMN_ITEM_PRICE;
 
-class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.InventoryHolder>{
+class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.InventoryHolder> {
     private Cursor mCursor;
-    private OnButtonSalesListener mSalesButtonListener;
-    private OnInventoryItemListener mInventoryItemListener;
+    private final OnButtonSalesListener mSalesButtonListener;
+    private final OnInventoryItemListener mInventoryItemListener;
 
-    public InventoryAdapter(Context context, OnButtonSalesListener salesListener, OnInventoryItemListener itemListener) {
+    public InventoryAdapter(OnButtonSalesListener salesListener, OnInventoryItemListener itemListener) {
         mSalesButtonListener = salesListener;
         mInventoryItemListener = itemListener;
 
     }
 
-    public interface OnButtonSalesListener{
+    public interface OnButtonSalesListener {
         void salesButtonOnClick(int position);
     }
 
-    public interface OnInventoryItemListener{
+    public interface OnInventoryItemListener {
         void inventoryItemOnClick(int position);
     }
 
-    public void setData(Cursor c){
+    public void setData(Cursor c) {
         mCursor = c;
     }
 
-    public Cursor getData(){
+    public Cursor getData() {
         return mCursor;
     }
 
@@ -65,24 +65,24 @@ class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.InventoryHo
 
     @Override
     public int getItemCount() {
-        if(mCursor == null)
+        if (mCursor == null)
             return 0;
 
         return mCursor.getCount();
     }
 
-    public class InventoryHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        TextView tvItemName;
-        TextView tvItemQuantity;
-        TextView tvItemPrice;
-        ImageView buttonSale;
+    public class InventoryHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        final TextView tvItemName;
+        final TextView tvItemQuantity;
+        final TextView tvItemPrice;
+        final ImageView buttonSale;
 
         public InventoryHolder(View itemView) {
             super(itemView);
-            tvItemName = (TextView)itemView.findViewById(R.id.name);
-            tvItemQuantity = (TextView)itemView.findViewById(R.id.quantity);
-            tvItemPrice = (TextView)itemView.findViewById(R.id.price);
-            buttonSale = (ImageView)itemView.findViewById(R.id.sale);
+            tvItemName = (TextView) itemView.findViewById(R.id.name);
+            tvItemQuantity = (TextView) itemView.findViewById(R.id.quantity);
+            tvItemPrice = (TextView) itemView.findViewById(R.id.price);
+            buttonSale = (ImageView) itemView.findViewById(R.id.sale);
             buttonSale.setOnClickListener(this);
             itemView.setOnClickListener(this);
 
@@ -90,7 +90,7 @@ class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.InventoryHo
 
         @Override
         public void onClick(View v) {
-            if(v.getId() == R.id.sale)
+            if (v.getId() == R.id.sale)
                 mSalesButtonListener.salesButtonOnClick(getAdapterPosition());
             else
                 mInventoryItemListener.inventoryItemOnClick(getAdapterPosition());

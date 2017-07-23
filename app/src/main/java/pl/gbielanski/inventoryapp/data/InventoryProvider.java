@@ -23,16 +23,16 @@ import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryIte
 import static pl.gbielanski.inventoryapp.data.InventoryItemContract.PATH_INVENTORY_ITEMS;
 
 public class InventoryProvider extends ContentProvider {
-    public static final String LOG_TAG = InventoryProvider.class.getSimpleName();
+    private static final String LOG_TAG = InventoryProvider.class.getSimpleName();
 
     private static final int CODE_ITEMS = 100;
     private static final int CODE_ITEM_ID = 101;
 
-    public static final UriMatcher sUriMatcher = buildUriMatcher();
+    private static final UriMatcher sUriMatcher = buildUriMatcher();
     private InventoryDBHelper mDbHelper;
 
 
-    public static UriMatcher buildUriMatcher() {
+    private static UriMatcher buildUriMatcher() {
         UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         uriMatcher.addURI(InventoryItemContract.CONTENT_AUTHORITY, PATH_INVENTORY_ITEMS, CODE_ITEMS);
         uriMatcher.addURI(InventoryItemContract.CONTENT_AUTHORITY, PATH_INVENTORY_ITEMS + "/#", CODE_ITEM_ID);

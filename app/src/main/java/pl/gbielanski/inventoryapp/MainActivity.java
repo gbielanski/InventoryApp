@@ -9,6 +9,7 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,11 +27,10 @@ import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryIte
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>,
         InventoryAdapter.OnButtonSalesListener, InventoryAdapter.OnInventoryItemListener {
-    public static final String LOG_TAG = MainActivity.class.getSimpleName();
 
-    public static final int LOADER_ID = 1234;
+    private static final int LOADER_ID = 1234;
     private InventoryAdapter mAdapter;
-    private View.OnClickListener fabListener = new View.OnClickListener() {
+    private final View.OnClickListener fabListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(MainActivity.this, DetailActivity.class);
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         mInventoryList = (RecyclerView) findViewById(R.id.rc_inventory_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mInventoryList.setLayoutManager(layoutManager);
-        mAdapter = new InventoryAdapter(this, this, this);
+        mAdapter = new InventoryAdapter(this, this);
         mEmptyListTextView = (TextView) findViewById(R.id.empty_list_textview);
         mEmptyListTextView.setVisibility(View.VISIBLE);
         mInventoryList.setAdapter(mAdapter);
@@ -121,4 +121,5 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         intent.setData(uri);
         startActivity(intent);
     }
+
 }

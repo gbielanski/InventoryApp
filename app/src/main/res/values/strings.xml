@@ -15,7 +15,6 @@
     <string name="price_cannot_be_empty">Price field cannot be empty!</string>
     <string name="price_must_be_a_number">Price must be a number!</string>
     <string name="order_button_label">Order</string>
-    <string name="item_ordered">Item ordered from supplier</string>
     <string name="menu_item_delete_title">delete</string>
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
@@ -30,4 +29,7 @@
     <string name="supplier_cannot_be_empty">Name field cannot be empty!</string>
     <string name="cannot_granted">Cannot make the order. Calling permission not granted.</string>
     <string name="permission_required">Call phone permission required to perform order!</string>
+    <string name="increase_quantity">Increase quantity</string>
+    <string name="decrease_quantity">decrease quantity</string>
+    <string name="inventory_item_photo">inventory item photo</string>
 </resources>

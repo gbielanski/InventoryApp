@@ -6,13 +6,13 @@ import android.provider.BaseColumns;
 import android.text.TextUtils;
 
 public class InventoryItemContract {
-    private InventoryItemContract(){
+    private InventoryItemContract() {
 
     }
 
     public static final String CONTENT_AUTHORITY = "pl.gbielanski.inventoryapp";
 
-    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+    private static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
     public static final String PATH_INVENTORY_ITEMS = "items";
 
@@ -34,7 +34,7 @@ public class InventoryItemContract {
         public final static String COLUMN_ITEM_PICTURE = "picture";
         public final static String COLUMN_ITEM_SUPPLIER = "supplier";
 
-        public static Uri getContentUriForId(int id){
+        public static Uri getContentUriForId(int id) {
             return Uri.withAppendedPath(CONTENT_URI, String.valueOf(id));
         }
     }
