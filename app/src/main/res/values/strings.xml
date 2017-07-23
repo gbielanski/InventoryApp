@@ -32,4 +32,5 @@
     <string name="increase_quantity">Increase quantity</string>
     <string name="decrease_quantity">decrease quantity</string>
     <string name="inventory_item_photo">inventory item photo</string>
+    <string name="picture_cannot_be_empty">Picture cannot be empty! Take a photo.</string>
 </resources>

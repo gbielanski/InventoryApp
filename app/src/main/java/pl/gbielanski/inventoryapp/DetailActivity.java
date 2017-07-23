@@ -284,6 +284,12 @@ public class DetailActivity extends AppCompatActivity implements
             return;
         }
 
+        if(mImageSet == false)
+        {
+            Toast.makeText(this, R.string.picture_cannot_be_empty, Toast.LENGTH_LONG).show();
+            return;
+        }
+
         cv.put(COLUMN_ITEM_NAME, name);
         cv.put(COLUMN_ITEM_QUANTITY, quantity);
         cv.put(COLUMN_ITEM_PRICE, price);
