@@ -1,7 +1,9 @@
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">Inventory App</string>
-    <string name="quantity_label">Quantity:</string>
-    <string name="price_label">Price:</string>
+    <string name="quantity_label">Quantity: <xliff:g id="quantity" example="2"> %d</xliff:g></string>
+    <string name="quantity_label_detail">Quantity:</string>
+    <string name="price_label">Price: <xliff:g id="price" example="2"> %d </xliff:g> EUR</string>
+    <string name="price_label_detail">Price (EUR):</string>
     <string name="name_label">Name:</string>
     <string name="cannot_sold">Item cannot be sold, quantity is zero</string>
     <string name="title_add">Add item</string>

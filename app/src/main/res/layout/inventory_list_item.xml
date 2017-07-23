@@ -45,37 +45,25 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/quantity_label"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"/>
-
-                <TextView
                     android:id="@+id/quantity"
-                    android:layout_width="72dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/list_small_padding"
                     android:layout_marginStart="@dimen/list_small_padding"
-                    android:gravity="end"
+                    android:gravity="start"
+                    android:minWidth="130dp"
                     tools:text="100 000"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"/>
 
                 <TextView
+                    android:id="@+id/price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/list_small_padding"
                     android:layout_marginStart="@dimen/list_small_padding"
-                    android:text="@string/price_label"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"/>
-
-                <TextView
-                    android:id="@+id/price"
-                    android:layout_width="72dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/list_small_padding"
-                    android:layout_marginStart="@dimen/list_small_padding"
-                    android:gravity="end"
-                    tools:text="100 PLN"
+                    android:minWidth="150dp"
+                    tools:text="100"
+                    android:layout_gravity="end"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"/>
             </LinearLayout>
         </LinearLayout>

@@ -56,11 +56,11 @@ class InventoryAdapter extends RecyclerView.Adapter<InventoryAdapter.InventoryHo
         String itemName = mCursor.getString(mCursor.getColumnIndex(COLUMN_ITEM_NAME));
         holder.tvItemName.setText(itemName);
 
-        Integer itemPrice = mCursor.getInt(mCursor.getColumnIndex(COLUMN_ITEM_PRICE));
-        holder.tvItemPrice.setText(itemPrice.toString());
-
         Integer itemQuantity = mCursor.getInt(mCursor.getColumnIndex(COLUMN_ITEM_QUANTITY));
-        holder.tvItemQuantity.setText(itemQuantity.toString());
+        holder.tvItemQuantity.setText(holder.itemView.getContext().getString(R.string.quantity_label, itemQuantity));
+
+        Integer itemPrice = mCursor.getInt(mCursor.getColumnIndex(COLUMN_ITEM_PRICE));
+        holder.tvItemPrice.setText(holder.itemView.getContext().getString(R.string.price_label, itemPrice));
     }
 
     @Override
