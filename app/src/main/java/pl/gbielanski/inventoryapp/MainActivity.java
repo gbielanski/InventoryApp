@@ -20,6 +20,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry;
 
 import static android.view.View.GONE;
@@ -30,33 +33,29 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     private static final int LOADER_ID = 1234;
     private InventoryAdapter mAdapter;
-    private final View.OnClickListener fabListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Intent intent = new Intent(MainActivity.this, DetailActivity.class);
-            startActivity(intent);
-        }
-    };
-    private TextView mEmptyListTextView;
-    private RecyclerView mInventoryList;
+
+    @OnClick(R.id.fab)
+    public void startAddActivity(){
+        Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+        startActivity(intent);
+    }
+
+    @BindView(R.id.empty_list_textview) TextView mEmptyListTextView;
+    @BindView(R.id.rc_inventory_list) RecyclerView mInventoryList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mInventoryList = (RecyclerView) findViewById(R.id.rc_inventory_list);
+        ButterKnife.bind(this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mInventoryList.setLayoutManager(layoutManager);
         mAdapter = new InventoryAdapter(this, this);
-        mEmptyListTextView = (TextView) findViewById(R.id.empty_list_textview);
         mEmptyListTextView.setVisibility(View.VISIBLE);
         mInventoryList.setAdapter(mAdapter);
         mInventoryList.setVisibility(GONE);
         getLoaderManager().initLoader(LOADER_ID, null, this);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(fabListener);
     }
 
     @Override

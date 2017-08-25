@@ -15,8 +15,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.os.Parcelable;
-import android.os.PersistableBundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
@@ -33,6 +31,10 @@ import android.widget.Toast;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry.COLUMN_ITEM_NAME;
 import static pl.gbielanski.inventoryapp.data.InventoryItemContract.InventoryItemEntry.COLUMN_ITEM_PICTURE;
@@ -52,68 +54,53 @@ public class DetailActivity extends AppCompatActivity implements
     private final String LOG_TAG = DetailActivity.class.getSimpleName();
 
     private Uri mCurrentUri;
-    private EditText mEditTextName;
-    private EditText mEditTextPrice;
-    private EditText mEditTextQuantity;
-    private EditText mEditTextSupplier;
-    private ImageView mItemImage;
+    @BindView(R.id.detail_name) EditText mEditTextName;
+    @BindView(R.id.detail_price) EditText mEditTextPrice;
+    @BindView(R.id.detail_quantity) EditText mEditTextQuantity;
+    @BindView(R.id.supplier_number) EditText mEditTextSupplier;
+    @BindView(R.id.item_image) ImageView mItemImage;
+    @BindView(R.id.order_button) Button mOrderButton;
+    @BindView(R.id.save_button) Button mSaveButton;
 
-    private final View.OnClickListener mSaveButtonListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            insertInventoryItem();
+    @OnClick(R.id.increase)
+    public void increase() {
+        String quantityString = mEditTextQuantity.getText().toString();
+        Integer quantity = 0;
+        try {
+            if (!TextUtils.isEmpty(quantityString))
+                quantity = Integer.parseInt(quantityString);
+        } catch (NumberFormatException e) {
+            Toast.makeText(DetailActivity.this, R.string.quantity_must_be_a_number, Toast.LENGTH_LONG).show();
+            return;
         }
-    };
 
-    private final View.OnClickListener mOrderButtonListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            orderFromSupplier();
+        quantity++;
+        mEditTextQuantity.setText(quantity.toString());
+
+        if (mCurrentUri != null)
+            updateItemDetails(quantity);
+    }
+
+
+    @OnClick(R.id.decrease)
+    public void decrease(View v) {
+        String quantityString = mEditTextQuantity.getText().toString();
+        Integer quantity = 0;
+        try {
+            if (!TextUtils.isEmpty(quantityString))
+                quantity = Integer.parseInt(quantityString);
+        } catch (NumberFormatException e) {
+            Toast.makeText(DetailActivity.this, R.string.quantity_must_be_a_number, Toast.LENGTH_LONG).show();
+            return;
         }
-    };
 
-    private final View.OnClickListener mIncreaseListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            String quantityString = mEditTextQuantity.getText().toString();
-            Integer quantity = 0;
-            try {
-                if (!TextUtils.isEmpty(quantityString))
-                    quantity = Integer.parseInt(quantityString);
-            } catch (NumberFormatException e) {
-                Toast.makeText(DetailActivity.this, R.string.quantity_must_be_a_number, Toast.LENGTH_LONG).show();
-                return;
-            }
+        if (quantity > 0)
+            quantity--;
+        mEditTextQuantity.setText(quantity.toString());
 
-            quantity++;
-            mEditTextQuantity.setText(quantity.toString());
-
-            if (mCurrentUri != null)
-                updateItemDetails(quantity);
-        }
-    };
-
-    private final View.OnClickListener mDecreaseListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            String quantityString = mEditTextQuantity.getText().toString();
-            Integer quantity = 0;
-            try {
-                if (!TextUtils.isEmpty(quantityString))
-                    quantity = Integer.parseInt(quantityString);
-            } catch (NumberFormatException e) {
-                Toast.makeText(DetailActivity.this, R.string.quantity_must_be_a_number, Toast.LENGTH_LONG).show();
-                return;
-            }
-
-            if (quantity > 0)
-                quantity--;
-            mEditTextQuantity.setText(quantity.toString());
-
-            if (mCurrentUri != null)
-                updateItemDetails(quantity);
-        }
-    };
+        if (mCurrentUri != null)
+            updateItemDetails(quantity);
+    }
 
     private final View.OnClickListener mImageOnClickListener = new View.OnClickListener() {
         @Override
@@ -131,7 +118,8 @@ public class DetailActivity extends AppCompatActivity implements
         getContentResolver().update(mCurrentUri, cv, null, null);
     }
 
-    private void orderFromSupplier() {
+    @OnClick(R.id.order_button)
+    void orderFromSupplier() {
 
         Intent intent = new Intent(Intent.ACTION_CALL);
         intent.setData(Uri.parse("tel:" + mEditTextSupplier.getText().toString()));
@@ -174,25 +162,12 @@ public class DetailActivity extends AppCompatActivity implements
         }
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+        ButterKnife.bind(this);
 
-        mEditTextName = (EditText) findViewById(R.id.detail_name);
-        mEditTextPrice = (EditText) findViewById(R.id.detail_price);
-        mEditTextQuantity = (EditText) findViewById(R.id.detail_quantity);
-        mEditTextSupplier = (EditText) findViewById(R.id.supplier_number);
-        Button mSaveButton = (Button) findViewById(R.id.save_button);
-        Button mOrderButton = (Button) findViewById(R.id.order_button);
-        ImageView mIncreaseButton = (ImageView) findViewById(R.id.increase);
-        ImageView mDecreaseButton = (ImageView) findViewById(R.id.decrease);
-
-        mIncreaseButton.setOnClickListener(mIncreaseListener);
-        mDecreaseButton.setOnClickListener(mDecreaseListener);
-
-        mItemImage = (ImageView) findViewById(R.id.item_image);
         if (savedInstanceState != null) {
             Bitmap bitmap = savedInstanceState.getParcelable(IMAGE_KEY);
             mItemImage.setImageBitmap(bitmap);
@@ -209,23 +184,18 @@ public class DetailActivity extends AppCompatActivity implements
             mEditTextQuantity.setEnabled(true);
             mEditTextSupplier.setEnabled(true);
             mSaveButton.setVisibility(View.VISIBLE);
-            mSaveButton.setOnClickListener(mSaveButtonListener);
             mOrderButton.setVisibility(View.GONE);
             mItemImage.setOnClickListener(mImageOnClickListener);
 
         } else {
             setTitle(getString(R.string.title_details));
-
             mCurrentUri = uri;
-
             mEditTextName.setEnabled(false);
             mEditTextPrice.setEnabled(false);
             mEditTextQuantity.setEnabled(false);
             mEditTextSupplier.setEnabled(false);
             mOrderButton.setVisibility(View.VISIBLE);
-            mOrderButton.setOnClickListener(mOrderButtonListener);
             mSaveButton.setVisibility(View.GONE);
-
             getLoaderManager().initLoader(LOADER_ID, null, this);
         }
     }
@@ -244,7 +214,8 @@ public class DetailActivity extends AppCompatActivity implements
         }
     }
 
-    private void insertInventoryItem() {
+    @OnClick(R.id.save_button)
+    void insertInventoryItem() {
         ContentValues cv = new ContentValues();
 
         String name = mEditTextName.getText().toString();
@@ -284,8 +255,7 @@ public class DetailActivity extends AppCompatActivity implements
             return;
         }
 
-        if(mImageSet == false)
-        {
+        if (mImageSet == false) {
             Toast.makeText(this, R.string.picture_cannot_be_empty, Toast.LENGTH_LONG).show();
             return;
         }
